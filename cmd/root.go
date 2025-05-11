@@ -1,50 +1,54 @@
+/*
+Copyright © 2025 NAME HERE <EMAIL ADDRESS>
+*/
 package cmd
 
 import (
 	"log"
 	"os"
-	"time"
 
-	"github.com/arturshevchenko/telegram_bot_go/handlers"
 	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
-	"gopkg.in/telebot.v4"
 )
 
+// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "telegram-bot",
-	Short: "Telegram bot with Cobra and Telebot",
-	Run: func(cmd *cobra.Command, args []string) {
-		// Load .env file if present
-		err := godotenv.Load()
-		if err != nil {
-			log.Println("No .env file found or error loading .env file:", err)
-		}
+	Use:   "telegram_bot_go",
+	Short: "A brief description of your application",
+	Long: `A longer description that spans multiple lines and likely contains
+examples and usage of using your application. For example:
 
-		token := os.Getenv("TELE_TOKEN")
-		if token == "" {
-			log.Fatal("TELE_TOKEN env variable not set")
-		}
-
-		pref := telebot.Settings{
-			Token:  token,
-			Poller: &telebot.LongPoller{Timeout: 10 * time.Second},
-		}
-
-		bot, err := telebot.NewBot(pref)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		handlers.Register(bot)
-
-		log.Println("Bot is running...")
-		bot.Start()
-	},
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	// Uncomment the following line if your bare application
+	// has an action associated with it:
+	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
+// Execute adds all child commands to the root command and sets flags appropriately.
+// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		log.Fatal(err)
+	err := rootCmd.Execute()
+	if err != nil {
+		os.Exit(1)
 	}
+}
+
+func init() {
+	// Load .env file if present
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("No .env file found or error loading .env file:", err)
+	}
+
+	// Here you will define your flags and configuration settings.
+	// Cobra supports persistent flags, which, if defined here,
+	// will be global for your application.
+
+	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.telegram_bot_go.yaml)")
+
+	// Cobra also supports local flags, which will only run
+	// when this action is called directly.
+	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
